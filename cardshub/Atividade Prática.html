@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Cards</title>
+    <style>
+        /* Estilo global para a página */
+        body {
+            font-family: Arial, sans-serif; /* Define a fonte padrão para a página */
+            display: flex; /* Usa Flexbox para centralizar o conteúdo */
+            justify-content: center; /* Alinha o conteúdo horizontalmente ao centro */
+            align-items: center; /* Alinha o conteúdo verticalmente ao centro */
+            min-height: 100vh; /* Garante que a página ocupe pelo menos a altura da tela */
+            background-color: #2c003e; /* Cor de fundo roxo escuro */
+            background-image: url('https://example.com/purple-pattern.png'); /* Imagem de fundo roxa, substitua pelo URL real */
+            background-repeat: no-repeat; /* Evita que a imagem de fundo se repita */
+            background-size: cover; /* Faz com que a imagem de fundo cubra toda a área da tela */
+            background-attachment: fixed; /* Faz com que a imagem de fundo não se mova com o conteúdo */
+            margin: 0; /* Remove a margem padrão do navegador */
+            color: #e0e0e0; /* Cor do texto clara para contraste com o fundo escuro */
+        }
+
+        /* Estilo do grid que vai conter os cards */
+        #grid {
+            display: grid; /* Usa CSS Grid para layout dos cards */
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Cria colunas responsivas para os cards */
+            gap: 20px; /* Espaçamento entre os cards */
+            width: 90%; /* Largura do grid relativa à largura da tela */
+            max-width: 1200px; /* Largura máxima do grid */
+        }
+
+        /* Estilo dos cards individuais */
+        .card {
+            background: rgba(48, 48, 48, 0.9); /* Fundo escuro translúcido para os cards */
+            border-radius: 10px; /* Bordas arredondadas dos cards */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra suave ao redor dos cards */
+            padding: 20px; /* Espaçamento interno dos cards */
+            text-align: center; /* Centraliza o texto dentro dos cards */
+            transition: transform 0.3s; /* Animação suave ao passar o mouse */
+        }
+
+        /* Efeito ao passar o mouse sobre o card */
+        .card:hover {
+            transform: translateY(-10px); /* Eleva o card quando o cursor passa sobre ele */
+        }
+
+        /* Estilo da imagem de perfil */
+        .avatar {
+            border-radius: 50%; /* Faz com que a imagem fique circular */
+            width: 100px; /* Largura da imagem de perfil */
+            height: 100px; /* Altura da imagem de perfil */
+            object-fit: cover; /* Faz com que a imagem cubra a área sem distorcer */
+            border: 3px solid #8e2de2; /* Borda roxa clara ao redor da imagem */
+            margin-bottom: 15px; /* Espaçamento abaixo da imagem */
+        }
+
+        /* Estilo do nome do usuário */
+        .name {
+            font-size: 1.2em; /* Tamanho da fonte maior para o nome */
+            margin-bottom: 10px; /* Espaçamento abaixo do nome */
+            color: #e0e0e0; /* Cor do texto clara para contraste */
+        }
+
+        /* Estilo das tecnologias ou bio */
+        .technologies {
+            font-size: 0.9em; /* Tamanho da fonte menor para a bio ou tecnologias */
+            color: #b0b0b0; /* Cor do texto cinza claro */
+            margin-bottom: 15px; /* Espaçamento abaixo do texto */
+        }
+
+        /* Estilo do link para o perfil do GitHub */
+        .github-link {
+            text-decoration: none; /* Remove o sublinhado do link */
+            color: #8e2de2; /* Cor roxa clara para o link */
+            font-weight: bold; /* Texto em negrito para o link */
+        }
+
+        /* Efeito ao passar o mouse sobre o link do GitHub */
+        .github-link:hover {
+            text-decoration: underline; /* Adiciona sublinhado ao link quando o cursor passa sobre ele */
+        }
+    </style>
+
+    
+</head>
+<body>
+    <!-- Div onde os cards serão adicionados pelo JavaScript -->
+    <div id="grid">
+        <!-- Os cards serão inseridos aqui pelo JavaScript -->
+    </div>
+
+
+    <script>
+        // Lista dos usernames
+        const users = ["samdev18","leemoraes1", "matheusribeiroavila", "DiovaniBAugusto", "jonathanBAugusto","carolbarbosa101"];
+
+        // Função para buscar dados dos usuários
+        users.forEach(username => {
+            // Fazendo a requisição para a API do GitHub
+            fetch(`https://api.github.com/users/${username}`)
+            .then(response => response.json()) // Converte a resposta para JSON
+            .then(data => {
+                // Cria um elemento div para o card
+                const card = document.createElement('div');
+                card.className = 'card'; // Adiciona a classe 'card' ao elemento
+
+                // Preenche o conteúdo do card com os dados do usuário
+                card.innerHTML = `
+                    <img src="${data.avatar_url}" alt="${data.login}'s profile picture" class="avatar">
+                    <h2 class="name">${data.name || data.login}</h2>
+                    <p class="technologies">${data.bio || 'Tecnologias não informadas'}</p>
+                    <a href="${data.html_url}" class="github-link" target="_blank">Ver Perfil no GitHub</a>
+                `;
+
+                // Adiciona o card ao grid principal
+                document.getElementById('grid').appendChild(card);
+            })
+            .catch(error => console.error('Erro ao carregar os dados:', error)); // Exibe um erro se a requisição falhar
+        });
+    </script>
+</body>
+</html>

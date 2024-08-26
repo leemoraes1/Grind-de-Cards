@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Cards</title>
+    <style>
+
+        /* Estilo global para a página */
+        body {
+            font-family: Arial, sans-serif; /* Define a fonte padrão para a página */
+            display: flex; /* Usa Flexbox para centralizar o conteúdo */
+            justify-content: center; /* Alinha o conteúdo horizontalmente ao centro */
+            align-items: center; /* Alinha o conteúdo verticalmente ao centro */
+            min-height: 100vh; /* Garante que a página ocupe pelo menos a altura da tela */
+            background-color: #2c003e; /* Cor de fundo roxo escuro */
+            background-image: url('https://example.com/purple-pattern.png'); /* Substitua pelo URL real da imagem de fundo */
+            background-repeat: no-repeat; /* Evita que a imagem de fundo se repita */
+            background-size: cover; /* Faz com que a imagem de fundo cubra toda a área da tela */
+            background-attachment: fixed; /* Faz com que a imagem de fundo não se mova com o conteúdo */
+            margin: 0; /* Remove a margem padrão do navegador */
+            color: #e0e0e0; /* Cor do texto clara para contraste com o fundo escuro */
+        }
+
+        /* Estilo do grid que vai conter os cards */
+        #grid {
+            display: grid; /* Usa CSS Grid para layout dos cards */
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Colunas responsivas para os cards */
+            gap: 20px; /* Espaçamento entre os cards */
+            width: 90%; /* Largura do grid relativa à largura da tela */
+            max-width: 1200px; /* Largura máxima do grid */
+            padding: 20px; /* Espaçamento interno ao redor do grid */
+        }
+
+        /* Estilo dos cards individuais */
+        .card {
+            background: linear-gradient(145deg, #3d0056, #1a002e); /* Gradiente escuro roxo para o fundo dos cards */
+            border-radius: 15px; /* Bordas arredondadas dos cards */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Sombra mais pronunciada para os cards */
+            padding: 20px; /* Espaçamento interno dos cards */
+            text-align: center; /* Centraliza o texto dentro dos cards */
+            transition: transform 0.3s, box-shadow 0.3s; /* Animação suave ao passar o mouse */
+        }
+
+        /* Efeito ao passar o mouse sobre o card */
+        .card:hover {
+            transform: translateY(-10px); /* Eleva o card quando o cursor passa sobre ele */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* Aumenta a sombra ao passar o mouse */
+        }
+
+        /* Estilo da imagem de perfil */
+        .avatar {
+            border-radius: 50%; /* Faz com que a imagem fique circular */
+            width: 120px; /* Largura da imagem de perfil */
+            height: 120px; /* Altura da imagem de perfil */
+            object-fit: cover; /* Faz com que a imagem cubra a área sem distorcer */
+            border: 4px solid #8e2de2; /* Borda roxa clara ao redor da imagem */
+            margin-bottom: 20px; /* Espaçamento abaixo da imagem */
+            transition: border-color 0.3s; /* Animação suave para a cor da borda */
+        }
+
+        /* Efeito ao passar o mouse sobre a imagem de perfil */
+        .card:hover .avatar {
+            border-color: #a64ac9; /* Cor da borda muda ao passar o mouse */
+        }
+
+        /* Estilo do nome do usuário */
+        .name {
+            font-size: 1.4em; /* Tamanho da fonte maior para o nome */
+            margin-bottom: 10px; /* Espaçamento abaixo do nome */
+            color: #e0e0e0; /* Cor do texto clara para contraste */
+        }
+
+        /* Estilo das tecnologias ou bio */
+        .technologies {
+            font-size: 1em; /* Tamanho da fonte padrão para a bio ou tecnologias */
+            color: #b0b0b0; /* Cor do texto cinza claro */
+            margin-bottom: 20px; /* Espaçamento abaixo do texto */
+        }
+
+        /* Estilo do link para o perfil do GitHub */
+        .github-link {
+            text-decoration: none; /* Remove o sublinhado do link */
+            color: #8e2de2; /* Cor roxa clara para o link */
+            font-weight: bold; /* Texto em negrito para o link */
+            padding: 10px 20px; /* Espaçamento interno do link */
+            border-radius: 25px; /* Bordas arredondadas do botão */
+            background-color: rgba(255, 255, 255, 0.2); /* Fundo claro translúcido para o botão */
+            transition: background-color 0.3s, color 0.3s; /* Animação suave para o fundo e a cor do texto */
+        }
+
+        /* Efeito ao passar o mouse sobre o link do GitHub */
+        .github-link:hover {
+            background-color: #8e2de2; /* Fundo roxo ao passar o mouse */
+            color: #ffffff; /* Cor do texto muda para branco ao passar o mouse */
+        }
+    </style>
+</head>
+<body>
+    <div id="grid">
+        <!-- Os cards serão inseridos aqui pelo JavaScript -->
+    </div>
+    <script>
+        // Lista dos usernames
+        const users = ["leemoraes1", "matheusribeiroavila", "samdev18", "DiovaniBAugusto", "jonathanBAugusto","carolbarbosa101"];
+
+        // Função para buscar dados dos usuários
+        users.forEach(username => {
+            // Fazendo a requisição para a API do GitHub
+            fetch(`https://api.github.com/users/${username}`)
+            .then(response => response.json()) // Converte a resposta para JSON
+            .then(data => {
+                // Cria um elemento div para o card
+                const card = document.createElement('div');
+                card.className = 'card'; // Adiciona a classe 'card' ao elemento
+
+                // Preenche o conteúdo do card com os dados do usuário
+                card.innerHTML = `
+                    <img src="${data.avatar_url}" alt="${data.login}'s profile picture" class="avatar">
+                    <h2 class="name">${data.name || data.login}</h2>
+                    <p class="technologies">${data.bio || 'Tecnologias não informadas'}</p>
+                    <a href="${data.html_url}" class="github-link" target="_blank">Ver Perfil no GitHub</a>
+                `;
+
+                // Adiciona o card ao grid principal
+                document.getElementById('grid').appendChild(card);
+            })
+            .catch(error => console.error('Erro ao carregar os dados:', error)); // Exibe um erro se a requisição falhar
+        });
+    </script>
+</body>
+</html>
